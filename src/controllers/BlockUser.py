@@ -1,47 +1,46 @@
 from src.DataBase.DataBase import get_connection
 
-def block_user():
+def block_user(username):
     conn = get_connection()
     cursor = conn.cursor()
-    username = str(input("نام کاربری خود را وارد کنید: "))
-    cursor.execute("SELECT userid FROM users WHERE username = %s", (username,))
-    result = cursor.fetchone()
 
-    if result is None:
-        print("چنین کاربری وجود ندارد.")
-        exit()
-    else:
-        userid = result[0]
+    while True:
+        cursor.execute("SELECT userid FROM users WHERE username = %s", (username,))
+        result = cursor.fetchone()
+        if result is not None:
+            userid = result[0]
+            break
+        else:
+            print("Such a user does not exist. Please try again.")
+            username = input("Enter your username again: ").strip().lower()
 
     if userid % 2 == 0:
         try:
-            target_username= str(input("لطفاً نام کاربری شخص هدف را وارد کنید: "))
-            cursor.execute("SELECT userid FROM users WHERE username = %s", (target_username,))
-            result = cursor.fetchone()
-            if result is None:
-                print("چنین کاربری وجود ندارد.")
-                exit()
-            else:
-                target_userid = result[0]
+            while True:
+                target_username = input("Please enter the target user's username: ").strip().lower()
+                cursor.execute("SELECT userid FROM users WHERE username = %s", (target_username,))
+                result = cursor.fetchone()
+                if result is not None:
+                    target_userid = result[0]
+                    break
+                else:
+                    print("Such a user does not exist. Please try again.")
 
-            new_status = input("وضعیت جدید را وارد کنید (مثلاً 'active' یا 'inactive'): ")
+            while True:
+                new_status = input("Enter the new status ('active' or 'inactive'): ").strip().lower()
+                if new_status in ("active", "inactive"):
+                    break
+                else:
+                    print("Invalid status. Please enter 'active' or 'inactive'.")
 
-            cursor.execute("SELECT * FROM users WHERE userid = %s", (target_userid,))
-            result = cursor.fetchone()
-
-            if result:
-                cursor.execute("UPDATE users SET status = %s WHERE userid = %s", (new_status, target_userid))
-                print(f"عملیات انجام شد")
-            else:
-                print(f".کاربر با این شناسه وجود ندارد")
-
+            cursor.execute("UPDATE users SET status = %s WHERE userid = %s", (new_status, target_userid))
             conn.commit()
+            print("Operation completed.")
 
         except ValueError:
-            print("شناسه باید عدد باشد")
+            print("ID must be a number.")
 
     else:
-        print("این قابلیت برای شما وجود ندارد")
+        print("This feature is not available for you.")
 
     conn.close()
-

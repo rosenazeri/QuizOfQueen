@@ -1,5 +1,5 @@
 import html
-def leaderboard():
+def weekboard():
     try:
         from HTMLParser import HTMLParser
     except ImportError:
@@ -12,8 +12,8 @@ def leaderboard():
 
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT rank, username, xp FROM totaltable")
+    cursor.execute("SELECT rank, username FROM weektable")
     rows_data = cursor.fetchall()
 
-    headers = ["Rank", "Username", "XP"]
+    headers = ["Rank", "Username"]
     print(tabulate(rows_data, headers=headers, tablefmt="grid"))

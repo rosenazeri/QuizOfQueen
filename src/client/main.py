@@ -1,55 +1,62 @@
 from src.controllers.AddQuestion import add_question_to_db
 from src.controllers.BlockUser import block_user
-from src.controllers.PlayGame import play_game, update_totaltable
+from src.controllers.PlayGame import play_game
 from src.controllers.PlayerStatusTable import player_status
+from src.controllers.ShowQuestionsToApproved import q_status
 from src.controllers.ShowTotalTable import leaderboard
 from src.controllers.SignInSignUp import sign_in, sign_up
-
+from src.controllers.weekstatus import weekboard
 
 def main():
-    print("به بازی Quiz of Queen خوش آمدید!")
-    print("1. ورود (Sign In)")
-    print("2. ثبت‌نام (Sign Up)\n")
+    print("Welcome to the Quiz of Queen game!")
+    print("1. Sign In")
+    print("2. Sign Up\n")
 
     while True:
-        choice = input("انتخاب کنید (1 یا 2): ").strip()
+        choice = input("Please select (1 or 2): ").strip()
 
         if choice == "1":
-            sign_in()
+            username = sign_in()
             break
         elif choice == "2":
-            sign_up()
+            username = sign_up()
             break
         else:
-            print("ورودی نامعتبر. لطفاً فقط عدد 1 یا 2 را وارد کنید.")
+            print("Invalid input. Please enter only 1 or 2.")
 
     while True:
-        print("\n--- منوی اصلی ---")
-        print("1. شروع بازی")
-        print("2. مشاهده پروفایل اشخاص")
-        print("3. جدول رتبه‌بندی")
-        print("4. افزودن سوال")
-        print("5. بلاک کردن کاربر")
-        print("6. خروج")
+        print("\n--- Main Menu ---")
+        print("1. Start Game")
+        print("2. View Player Profile")
+        print("3. Ranking Tables")
+        print("4. Change Player Activity Status")
+        print("5. Add Question")
+        print("6. Approve New Questions")
+        print("7. Exit")
 
-        menu_choice = input("انتخاب شما: ").strip()
+        menu_choice = input("Your choice: ").strip()
 
         if menu_choice == "1":
-            play_game()
-            update_totaltable()
+            play_game(username)
         elif menu_choice == "2":
             player_status()
         elif menu_choice == "3":
+            print("Overall Leaderboard")
             leaderboard()
+
+            print("Weekly Leaderboard")
+            weekboard()
         elif menu_choice == "4":
-            add_question_to_db()
+            block_user(username)
         elif menu_choice == "5":
-            block_user()
+            add_question_to_db(username)
         elif menu_choice == "6":
-            print("خروج از برنامه. موفق باشید!")
+            q_status(username)
+        elif menu_choice == "7":
+            print("Exiting the program. Good luck!")
             break
         else:
-            print("گزینه نامعتبر. لطفاً عددی بین 1 تا 6 وارد کنید.")
+            print("Please enter a number between 1 and 7.")
 
 if __name__ == "__main__":
     main()

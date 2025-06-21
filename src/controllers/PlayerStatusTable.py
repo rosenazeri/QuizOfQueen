@@ -1,17 +1,21 @@
 from tabulate import tabulate
 from src.DataBase.DataBase import get_connection
+from tabulate import tabulate
+
+
 def player_status():
     conn = get_connection()
     try:
         cursor = conn.cursor()
-        username = str(input("لطفا نام کاربری شخص مورد نظر را وارد کنید: "))
 
-        cursor.execute("SELECT userid FROM users WHERE username = %s", (username,))
-        result = cursor.fetchone()
-
-        if result is None:
-            print("چنین کاربری وجود ندارد.")
-            exit()
+        while True:
+            username = input("Please enter the username of the desired user: ").strip().lower()
+            cursor.execute("SELECT userid FROM users WHERE username = %s", (username,))
+            result = cursor.fetchone()
+            if result is not None:
+                break
+            else:
+                print("Such a user does not exist. Please try again.")
 
         cursor.execute(
             """SELECT T.rank, T.username, PS.totalgames, PS.gameswon, PS.gameslost, PS.xp
@@ -22,11 +26,11 @@ def player_status():
         )
         rows_data = cursor.fetchall()
 
-        headers = ["Rank", "Username", "Totalgames", "Wons", "Losts", "Experience Points"]
+        headers = ["Rank", "Username", "Total Games", "Wins", "Losses", "Experience Points"]
         print(tabulate(rows_data, headers=headers, tablefmt="grid"))
 
     except Exception as e:
-        print("رخدادی در حین اجرای برنامه رخ داده است:", e)
+        print("An error occurred during execution:", e)
 
     finally:
         if 'conn' in locals():
