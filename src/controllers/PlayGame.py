@@ -1,7 +1,8 @@
 from src.DataBase.DataBase import get_connection
-from datetime import datetime
 import time
 
+import random
+from datetime import datetime
 
 def play_game(player1):
     conn = get_connection()
@@ -20,7 +21,16 @@ def play_game(player1):
         print("❌ Player 1's status is not active.")
         return
 
-    player2 = str(input("Enter the second player's username: ")).lower()
+    player2 = str(input("Enter the second player's username (or type 'random' for random player): ")).lower()
+    if player2 == "random":
+        cursor.execute("SELECT username FROM users WHERE username != %s AND status = 'active'", (player1,))
+        candidates = cursor.fetchall()
+        if not candidates:
+            print("❌ No available active players found.")
+            return
+        player2 = random.choice(candidates)[0]
+        print(f"🎲 Randomly selected player: {player2}")
+
     cursor.execute("SELECT userid, status FROM users WHERE username = %s", (player2,))
     result2 = cursor.fetchone()
     if not result2:
@@ -54,7 +64,6 @@ def play_game(player1):
         scorenum2 = 0
         print(f"\n📘 Starting Round {round_number}")
 
-        # Choose category
         cat = input("Choose a category:"
                     "\n(1) History"
                     "\n(2) Movie"
@@ -62,6 +71,11 @@ def play_game(player1):
                     "\n(4) Sport"
                     "\n(5) Foods"
                     "\n(6) Geography\n").strip()
+        cursor.execute("""
+            UPDATE categories 
+            SET mostplayed = mostplayed + 1
+            WHERE categoryid = %s
+        """, (cat,))
 
         difficulty = input("Difficulty level (E: Easy / M: Medium / H: Hard): ").strip().lower()
 

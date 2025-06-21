@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-06-22 01:06:35
+-- Started on 2025-06-22 02:10:01
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -175,7 +175,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.categories (
     categoryid integer NOT NULL,
-    name character varying(100) NOT NULL
+    name character varying(100) NOT NULL,
+    mostplayed integer DEFAULT 0
 );
 
 
@@ -306,23 +307,23 @@ CREATE TABLE public.weektable (
 ALTER TABLE public.weektable OWNER TO postgres;
 
 --
--- TOC entry 4897 (class 0 OID 16479)
+-- TOC entry 4898 (class 0 OID 16479)
 -- Dependencies: 218
 -- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.categories (categoryid, name) FROM stdin;
-1	History
-2	Movie
-3	Music
-4	Sport
-5	Foods
-6	Geography
+COPY public.categories (categoryid, name, mostplayed) FROM stdin;
+3	Music	23
+1	History	32
+2	Movie	14
+6	Geography	17
+5	Foods	20
+4	Sport	10
 \.
 
 
 --
--- TOC entry 4899 (class 0 OID 16507)
+-- TOC entry 4900 (class 0 OID 16507)
 -- Dependencies: 220
 -- Data for Name: gamesessions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -353,11 +354,12 @@ COPY public.gamesessions (sessionid, player1id, player2id, starttime, endtime, s
 23	2	5	21:13:33.449107	21:13:59.579264	completed	5
 24	2	5	22:27:25.760886	\N	active	\N
 25	5	2	22:27:51.330102	22:28:19.752437	completed	2
+26	1	8	01:52:43.058169	\N	active	\N
 \.
 
 
 --
--- TOC entry 4900 (class 0 OID 16560)
+-- TOC entry 4901 (class 0 OID 16560)
 -- Dependencies: 221
 -- Data for Name: playerstatus; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -374,7 +376,7 @@ COPY public.playerstatus (userid, totalgames, gameswon, gameslost, xp, accuracy)
 
 
 --
--- TOC entry 4898 (class 0 OID 16486)
+-- TOC entry 4899 (class 0 OID 16486)
 -- Dependencies: 219
 -- Data for Name: questions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -627,7 +629,7 @@ COPY public.questions (questionid, text, optiona, optionb, optionc, optiond, cor
 
 
 --
--- TOC entry 4901 (class 0 OID 16771)
+-- TOC entry 4902 (class 0 OID 16771)
 -- Dependencies: 222
 -- Data for Name: rounds; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -728,7 +730,7 @@ COPY public.rounds (roundid, sessionid, roundnumber, starttime, endtime) FROM st
 
 
 --
--- TOC entry 4902 (class 0 OID 16790)
+-- TOC entry 4903 (class 0 OID 16790)
 -- Dependencies: 223
 -- Data for Name: totaltable; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -743,7 +745,7 @@ COPY public.totaltable (userid, username, xp, rank) FROM stdin;
 
 
 --
--- TOC entry 4896 (class 0 OID 16469)
+-- TOC entry 4897 (class 0 OID 16469)
 -- Dependencies: 217
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -760,7 +762,7 @@ COPY public.users (userid, username, email, passwordhash, registerdate, status) 
 
 
 --
--- TOC entry 4903 (class 0 OID 16846)
+-- TOC entry 4904 (class 0 OID 16846)
 -- Dependencies: 224
 -- Data for Name: weektable; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -774,7 +776,7 @@ COPY public.weektable (userid, username, rank) FROM stdin;
 
 
 --
--- TOC entry 4722 (class 2606 OID 16485)
+-- TOC entry 4723 (class 2606 OID 16485)
 -- Name: categories categories_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -783,7 +785,7 @@ ALTER TABLE ONLY public.categories
 
 
 --
--- TOC entry 4724 (class 2606 OID 16483)
+-- TOC entry 4725 (class 2606 OID 16483)
 -- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -792,7 +794,7 @@ ALTER TABLE ONLY public.categories
 
 
 --
--- TOC entry 4730 (class 2606 OID 16513)
+-- TOC entry 4731 (class 2606 OID 16513)
 -- Name: gamesessions gamesessions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -801,7 +803,7 @@ ALTER TABLE ONLY public.gamesessions
 
 
 --
--- TOC entry 4733 (class 2606 OID 16569)
+-- TOC entry 4734 (class 2606 OID 16569)
 -- Name: playerstatus playerstats_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -810,7 +812,7 @@ ALTER TABLE ONLY public.playerstatus
 
 
 --
--- TOC entry 4728 (class 2606 OID 16496)
+-- TOC entry 4729 (class 2606 OID 16496)
 -- Name: questions questions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -819,7 +821,7 @@ ALTER TABLE ONLY public.questions
 
 
 --
--- TOC entry 4735 (class 2606 OID 16775)
+-- TOC entry 4736 (class 2606 OID 16775)
 -- Name: rounds rounds_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -828,7 +830,7 @@ ALTER TABLE ONLY public.rounds
 
 
 --
--- TOC entry 4737 (class 2606 OID 16794)
+-- TOC entry 4738 (class 2606 OID 16794)
 -- Name: totaltable totaltable_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -837,7 +839,7 @@ ALTER TABLE ONLY public.totaltable
 
 
 --
--- TOC entry 4716 (class 2606 OID 16478)
+-- TOC entry 4717 (class 2606 OID 16478)
 -- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -846,7 +848,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 4718 (class 2606 OID 16474)
+-- TOC entry 4719 (class 2606 OID 16474)
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -855,7 +857,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 4720 (class 2606 OID 16476)
+-- TOC entry 4721 (class 2606 OID 16476)
 -- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -864,7 +866,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 4739 (class 2606 OID 16850)
+-- TOC entry 4740 (class 2606 OID 16850)
 -- Name: weektable weektable_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -873,7 +875,7 @@ ALTER TABLE ONLY public.weektable
 
 
 --
--- TOC entry 4725 (class 1259 OID 16615)
+-- TOC entry 4726 (class 1259 OID 16615)
 -- Name: idx_category_name; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -881,7 +883,7 @@ CREATE INDEX idx_category_name ON public.categories USING btree (name);
 
 
 --
--- TOC entry 4713 (class 1259 OID 16614)
+-- TOC entry 4714 (class 1259 OID 16614)
 -- Name: idx_email; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -889,7 +891,7 @@ CREATE INDEX idx_email ON public.users USING btree (email);
 
 
 --
--- TOC entry 4731 (class 1259 OID 16617)
+-- TOC entry 4732 (class 1259 OID 16617)
 -- Name: idx_game_status; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -897,7 +899,7 @@ CREATE INDEX idx_game_status ON public.gamesessions USING btree (status);
 
 
 --
--- TOC entry 4714 (class 1259 OID 16618)
+-- TOC entry 4715 (class 1259 OID 16618)
 -- Name: idx_passwordhash; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -905,7 +907,7 @@ CREATE INDEX idx_passwordhash ON public.users USING btree (passwordhash);
 
 
 --
--- TOC entry 4726 (class 1259 OID 16616)
+-- TOC entry 4727 (class 1259 OID 16616)
 -- Name: idx_question_category; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -913,7 +915,7 @@ CREATE INDEX idx_question_category ON public.questions USING btree (categoryid);
 
 
 --
--- TOC entry 4750 (class 2620 OID 16626)
+-- TOC entry 4751 (class 2620 OID 16626)
 -- Name: questions trg_limitquestionspercategory; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -921,7 +923,7 @@ CREATE TRIGGER trg_limitquestionspercategory BEFORE INSERT ON public.questions F
 
 
 --
--- TOC entry 4749 (class 2620 OID 16624)
+-- TOC entry 4750 (class 2620 OID 16624)
 -- Name: users trg_setregisterdate; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
@@ -929,7 +931,7 @@ CREATE TRIGGER trg_setregisterdate BEFORE INSERT ON public.users FOR EACH ROW EX
 
 
 --
--- TOC entry 4742 (class 2606 OID 16514)
+-- TOC entry 4743 (class 2606 OID 16514)
 -- Name: gamesessions gamesessions_player1id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -938,7 +940,7 @@ ALTER TABLE ONLY public.gamesessions
 
 
 --
--- TOC entry 4743 (class 2606 OID 16519)
+-- TOC entry 4744 (class 2606 OID 16519)
 -- Name: gamesessions gamesessions_player2id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -947,7 +949,7 @@ ALTER TABLE ONLY public.gamesessions
 
 
 --
--- TOC entry 4744 (class 2606 OID 16524)
+-- TOC entry 4745 (class 2606 OID 16524)
 -- Name: gamesessions gamesessions_winnerid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -956,7 +958,7 @@ ALTER TABLE ONLY public.gamesessions
 
 
 --
--- TOC entry 4745 (class 2606 OID 16925)
+-- TOC entry 4746 (class 2606 OID 16925)
 -- Name: playerstatus playerstats_userid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -965,7 +967,7 @@ ALTER TABLE ONLY public.playerstatus
 
 
 --
--- TOC entry 4740 (class 2606 OID 16502)
+-- TOC entry 4741 (class 2606 OID 16502)
 -- Name: questions questions_authorid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -974,7 +976,7 @@ ALTER TABLE ONLY public.questions
 
 
 --
--- TOC entry 4741 (class 2606 OID 16497)
+-- TOC entry 4742 (class 2606 OID 16497)
 -- Name: questions questions_categoryid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -983,7 +985,7 @@ ALTER TABLE ONLY public.questions
 
 
 --
--- TOC entry 4746 (class 2606 OID 16776)
+-- TOC entry 4747 (class 2606 OID 16776)
 -- Name: rounds rounds_sessionid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -992,7 +994,7 @@ ALTER TABLE ONLY public.rounds
 
 
 --
--- TOC entry 4747 (class 2606 OID 16795)
+-- TOC entry 4748 (class 2606 OID 16795)
 -- Name: totaltable userid; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1001,7 +1003,7 @@ ALTER TABLE ONLY public.totaltable
 
 
 --
--- TOC entry 4748 (class 2606 OID 16851)
+-- TOC entry 4749 (class 2606 OID 16851)
 -- Name: weektable weektable_userid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1009,7 +1011,7 @@ ALTER TABLE ONLY public.weektable
     ADD CONSTRAINT weektable_userid_fkey FOREIGN KEY (userid) REFERENCES public.users(userid);
 
 
--- Completed on 2025-06-22 01:06:35
+-- Completed on 2025-06-22 02:10:02
 
 --
 -- PostgreSQL database dump complete

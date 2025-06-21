@@ -1,5 +1,6 @@
 from src.controllers.AddQuestion import add_question_to_db
 from src.controllers.BlockUser import block_user
+from src.controllers.CategoryTable import cattable
 from src.controllers.PlayGame import play_game
 from src.controllers.PlayerStatusTable import player_status
 from src.controllers.ShowQuestionsToApproved import q_status
@@ -46,6 +47,9 @@ def main():
 
             print("Weekly Leaderboard")
             weekboard()
+
+            print("Most Played Category")
+            cattable()
         elif menu_choice == "4":
             block_user(username)
         elif menu_choice == "5":
