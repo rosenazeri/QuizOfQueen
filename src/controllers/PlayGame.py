@@ -64,13 +64,18 @@ def play_game(player1):
         scorenum2 = 0
         print(f"\n📘 Starting Round {round_number}")
 
-        cat = input("Choose a category:"
-                    "\n(1) History"
-                    "\n(2) Movie"
-                    "\n(3) Music"
-                    "\n(4) Sport"
-                    "\n(5) Foods"
-                    "\n(6) Geography\n").strip()
+        while True:
+            cat = input("Choose a category:"
+                        "\n(1) History"
+                        "\n(2) Movie"
+                        "\n(3) Music"
+                        "\n(4) Sport"
+                        "\n(5) Foods"
+                        "\n(6) Geography\n").strip()
+            if cat in ['1', '2', '3', '4', '5', '6']:
+                break
+            else:
+                print("Please enter a valid number (1-6).")
         cursor.execute("""
             UPDATE categories 
             SET mostplayed = mostplayed + 1
