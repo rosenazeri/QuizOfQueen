@@ -1,4 +1,4 @@
-Quiz of Queen (King) is a popular mobile trivia game that tests players’ general knowledge across various categories.
+Quiz of Queen (King) is a popular mobile trivia game that tests players general knowledge across various categories.
 The game is designed to be engaging and competitive, allowing players to challenge their friends or other online participants in real-time quizzes.
 
 Key features of Quiz of Kings include:
